@@ -1,0 +1,19 @@
+using System;
+
+public class Example
+{
+    public static void Main()
+    {
+        String[] s;
+
+        Console.Clear();
+        s = Console.ReadLine().Split(' ');
+
+        int a = Int32.Parse(s[0]);
+        int b = Int32.Parse(s[1]);
+        
+        int c = a + b;
+
+        Console.WriteLine(s[0] + " + " + s[1] + " = " + c);
+    }
+}
