@@ -1,0 +1,73 @@
+다른 사람의 코드와 비교해보자
+
+using System;
+
+public class Solution {
+    public int solution(string[] board) {
+        int answer = 1;
+        int oCount = 0;
+        int xCount = 0;
+        for(int i=0;i<3;i++)
+        {
+            for(int j=0;j<3;j++)
+            {
+                switch(board[i][j])
+                {
+                    case 'O':
+                        oCount++;
+                        break;
+                    case 'X':
+                        xCount++;
+                        break;
+
+                }
+            }
+        }
+        // 갯수 체크
+        if(xCount > oCount || oCount >= xCount + 2)
+        {
+            return 0;
+        }
+        bool isOWin = false;
+        bool isXWin = false;
+        isOWin = isWin(board, 'O');
+        isXWin = isWin(board, 'X');
+
+        // 둘다 이긴 경우
+        if(isOWin == true && isXWin == true) return 0;
+
+        // X 가 이겼는데 O 가 더 놓은 경우
+        if(isXWin == true && xCount < oCount) return 0;
+
+        // O 가 이겼는데 X 가 더 놓은 경우
+        if(isOWin == true && xCount == oCount) return 0;
+
+        return answer;
+    }
+    // 각각의 승자 체크
+    bool isWin(string[] board, char check)
+    {
+        int countSide1 = 0;
+        int countSide2 = 0;
+        for(int i=0;i<3;i++)
+        {
+            if(board[i][0] == check && board[i][1] == check && board[i][2] == check) return true;
+            if(board[0][i] == check && board[1][i] == check && board[2][i] == check) return true;
+            if(board[i][i] == check) countSide1++;
+            if(board[i][2-i] == check) countSide2++;
+        }
+        if(countSide2 == 3 || countSide1 == 3) return true;
+
+
+        return false;
+    }
+}
+
+내 코드는 쓸데없이 CheckBingo 함수에서 for문 안에 foreach 문으로 여러번 반복해서 비효율적이었다.
+하지만 위 코드의 isWin 함수는 한 번의 for문 만으로 바로바로 가로세로 대각선(은 카운트하지만) 빙고의 유무, 즉 승자 체크가 가능하다.
+그리고 이 함수를 호출하는 solution 부분도 위 코드가 더 깔끔하다.
+일단 1(가능한 틱택토 경우의 수)을 기본값으로 두고 o,x 카운트를 세어, 규칙에 어긋날 경우 0을 리턴하고
+둘다 이겼거나 한 사람이 이겼는데 더 놓거나 하는 승패에 관련된 규칙에 어긋날 경우 0을 리턴하고
+이외의 모든 경우는 가능하므로 1을 리턴하도록하는 명확하고 깔끔하고 효율적인 코드이다........
+
+다음부턴 이렇게 짜야지~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
