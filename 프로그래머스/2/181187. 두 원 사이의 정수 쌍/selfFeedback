@@ -1,0 +1,71 @@
+처음에 작성한 코드
+using System;
+
+public class Solution {
+    public long solution(int r1, int r2) {
+        long answer = 0;
+        long rr1 = (long)Math.Pow((long)r1,2);
+        long rr2 = (long)Math.Pow((long)r2,2);
+        
+        for (long x = 0; x <= (long)r2; x++)
+        {
+            for (long y = (long)r2; y > 0; y--)
+            {
+                long xx = (long)Math.Pow(x,2);
+                long yy = (long)Math.Pow(y,2);
+                
+                if (rr1 <= xx + yy && xx + yy <= rr2)
+                {
+                    answer++;
+                }
+            }
+        }
+        
+        return answer*4;
+    }
+}
+
+였는데 4문제가 시간초과가 떠버려서 질문하기에 다른 사람들 질문을 훔쳐봤다...
+일단 저 코드의 문제는 뭐였냐.
+1. 이중 for문을 사용해서 연산량이 너무 많았음 (r2)^2만큼의 연산을 수행해서 너무 오래걸림
+2. 점 하나하나 두 원 사이 공간에 존재하는지 체크함 -> 점 하나마다 x와 y. 총 2번의 Math.Pow 연산을 (r2)^2만큼하니 당연히 안 되지................
+
+그래서 질문하기를 보니까 이중 for문을 사용하지 않고 x에 대해 가능한 y가 몇개인지 계산하는 형식으로 풀길래
+답지 본거나 다름없으니 분석이라도 제대로 해야겠다 싶어서 주석 왕창 달아서 풀었다.
+
+
+수정한 코드는
+using System;
+
+public class Solution {
+    public long solution(int r1, int r2) {
+        long answer = 0;
+        long rr1 = (long)Math.Pow((long)r1,2);  // 작은 원 반지름 제곱
+        long rr2 = (long)Math.Pow((long)r2,2);  // 큰 원 반지름 제곱
+        
+        for (long x = 0; x < r2; x++)
+        {
+            long maxY = (long)Math.Floor(Math.Sqrt(rr2-Math.Pow(x,2)));   // 현재 x값에서 answer에 포함할 수 있는 최대 y값
+            long minY;                                                    // 현재 x값에서 answer에 포함할 수 있는 최소 y값
+            
+            if (r1 <= x)
+            {
+                minY = 1;
+            }
+            else
+            {
+                minY = (long)Math.Ceiling(Math.Sqrt(rr1-Math.Pow(x,2)));
+            }
+            
+            answer += maxY-minY+1;
+        }
+        
+        return answer*4;
+    }
+}
+
+이전 코드와 다른 점
+1. for문을 한 개만 사용.
+2. 점마다 계산하는게 아니라 x마다 가능한 점이 몇개인지를 계산.
+
+그래서 이전 코드는 (r2)^2 번 검사 하던걸 r2번만 검사하면 된다! 자세한 주석은 cs참고...
